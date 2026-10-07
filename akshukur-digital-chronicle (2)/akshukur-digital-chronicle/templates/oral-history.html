@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge, photo with context %}
+
+{% block title %}Ақшұқырдың дауысы — ЦИФРЛЫҚ ШЕЖІРЕ{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <p class="hero-kicker reveal">Ауызша тарих жинағы</p>
+    <h1 class="page-title reveal">Ақшұқырдың дауысы</h1>
+    <p class="page-lead reveal">Жергілікті үлкендерден алынған сұхбаттар. Ауызша деректер факт емес — тексеруді қажет ететін құнды материал ретінде белгіленеді.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="notice glass reveal">
+      <strong>Әдістемелік ескерту:</strong> әр естелік мүмкіндігінше екінші бір тәуелсіз дерекпен (құжат, басқа естелік) кросс-тексеріледі. Расталмаған естеліктер 🟡 «Ауызша дерек» ретінде қала береді.
+    </div>
+
+    <div class="cards-grid">
+      {% for it in interviews %}
+      <article class="nav-card glass interview-card reveal">
+        <div class="interview-head">
+          <div class="avatar-placeholder" aria-hidden="true">{{ (it.name or 'А')[0] }}</div>
+          <div>
+            <h3>{{ it.name }}</h3>
+            <p class="muted small">Жасы: {{ it.age if it.age else 'дерек қажет' }}</p>
+          </div>
+        </div>
+        <p class="interview-topic"><strong>Тақырыбы:</strong> {{ it.topic }}</p>
+        <blockquote class="quote">{{ it.quote }}</blockquote>
+        <p>{{ it.memory }}</p>
+        {% if it.media %}
+          {% if it.media_type == 'video' %}
+            <video controls preload="none" src="{{ url_for('static', filename=it.media) }}"></video>
+          {% else %}
+            <audio controls preload="none" src="{{ url_for('static', filename=it.media) }}"></audio>
+          {% endif %}
+        {% else %}
+          <div class="media-placeholder">
+            <span>🎙️ Аудио/видео кейін енгізіледі</span>
+            <span class="muted small">static/media/ папкасына салып, data/interviews.json ішінде жолын жазыңыз</span>
+          </div>
+        {% endif %}
+        {{ badge(it.evidence) }}
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="glass panel reveal">
+      <h3>Сұхбат қалай өткізіледі?</h3>
+      <ol class="check-list">
+        <li>Алдын ала сұрақтар тізбесін дайындау (ауыл туралы естеліктер, мектеп, тарихи орындар);</li>
+        <li>Қатысушының келісімін алып, жазуды (аудио/видео) жүргізу;</li>
+        <li>Жазбаны мәтінге аударып (транскрипт), нақты фактілерді құжаттармен салыстыру;</li>
+        <li>Цитата мен медианы <code>data/interviews.json</code> арқылы осы бетке қою.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+{% endblock %}
